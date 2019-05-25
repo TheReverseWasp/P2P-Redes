@@ -2,6 +2,9 @@
 
 using namespace std;
 
+info::info() {
+  msg_type = 'X';
+}
 bool info::read_data(string message) {
   if (message.find("@") == string::npos) {
     return 0;
