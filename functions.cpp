@@ -14,3 +14,13 @@ void info::read_data(string message) {
     message = message.substr(pos + 1, message.size() - pos - 1);
   }
 }
+
+info operator= (info ended) {
+  msg_type = ended.msg_type;
+  size_of_message = ended.size_of_message;
+  data.clear();
+  for (int i = 0; i < ended.data.size(); i++) {
+    data.push_back(ended.data[i]);
+  }
+  return this;
+}
