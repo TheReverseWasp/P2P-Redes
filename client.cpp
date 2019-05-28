@@ -28,7 +28,16 @@ vector<thread> ThreadsEnviandoServidores;
 vector<thread> ThreadsRecibiendoTrackers;
 vector<thread> ThreadsEnviandoTrackers;
 
-//thread para el traker.
+
+vector<string> Files;
+//thread para el traker.o
+string ConvertSize(int n, int tam){
+    string size = to_string(n);
+    if(size.length() < tam){
+        size = string(tam - size.length(), '0') + size;
+    }
+    return size;
+}
 
 char ReadByte(int Socket){//para leer todo el mensaje com oen el xl
     char * byte = new char;
@@ -72,7 +81,7 @@ void RecibiendoCliente(int SocketClient){//socket donde mandare
         if(byte){
             request += byte;
             //request.push_back(byte);
-            if(request.size() > 4){
+            if(request.size() > 0){
                 if(request[request.length()-1] == '@'){
                     //leer = false;
                     ProcessMessage(SocketClient, request);
@@ -187,7 +196,18 @@ int main(){
     //iniciar el thread que recibe
     //debe iniciar la coneccion con el tracker, en determinado ip, luego debo poder intercambiar mensajes con el
     //despues de conectarme, debo hacer una revision de los archivosque tengo, comunicarle al tracker
+    //login
+    string LoginMessage = "121.0.0.1#hola#@";
+    MandarMensaje(TrackerSocket, "0" + ConvertSize(LoginMessage.size(), 3) + LoginMessage);
+    //register
+    string RegisterMessage = "121.0.0.1#hola#@";
+    MandarMensaje(TrackerSocket, "2" + ConvertSize(LoginMessage.size(), 3) + RegisterMessage);
+    // else register and login
+    //entre en el tracker, lo interesante es el register
 
+    for(int i = 0; i < Files.size(); i++){
+        //RegisterItem();//encapsular en funciones?
+    }
 
     //comunicandome con otros servidores
     //esto en funcion de,, debo tener mi funcion escuchar servidor
@@ -196,6 +216,11 @@ int main(){
     //aqui debo permitir que el usuario busque archivos, yo pedire al tracker la lista de servidores, y en mi modo cliente me conectare a ellos.
     while(true){
         cout << "ingresar nombre de archivo a buscar" << endl;
+        string buscar;
+        cin >> buscar; 
+        //solicitar informacion al travker, es devir pedir la lista de servidores
+        //creo que la lista de chunks tambien
+        //despues de recibida, mandar a crear las conexiones con los servidores
     }
 
     //srand (time(NULL));
