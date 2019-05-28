@@ -65,6 +65,36 @@ void MandarMensaje(int SocketClient, string mensaje){
 }
 
 void ProcessMessage(int Socket, string Mensaje){//creo que esta funcion podria processar los mensajes que reciba de otros clientes, servidores y del trakcer, de esta forma la funcion recibiendo clientes se usa igual para estos tres casos
+    //depende del tipode de mensaje
+    if(Mensaje[0] == '0'){
+        //avatar en uso
+        //cout << "Avatar rechazado" << endl;
+        //MandarMensaje(SocketClient, Message);
+    }
+    else if(Mensaje[0] == '1'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
+    else if(Mensaje[0] == '2'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
+    else if(Mensaje[0] == 'I'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
+    else if(Mensaje[0] == 'A'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
+    else if(Mensaje[0] == 'P'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
+    else if(Mensaje[0] == 'F'){
+        //ok, puede serguir jugando
+        //cout << "Avatar aceptado" << endl;
+    }
 
 }
 
