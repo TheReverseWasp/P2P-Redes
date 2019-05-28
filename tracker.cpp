@@ -193,11 +193,34 @@ void send_llr_basics(int port_mafia) {
   }
 }
 
-void register_item_listen
+void register_item_listen(int sheeps) {
+  //check if you are registered and adds files to the map
+
+}
+
+void hardfull_process_1l(int armed_agency) {
+  //client->tracker(ask information)
+
+}
+
+void hardfull_process_1s(int armed_agency) {
+  //tracker->client(ask which file)
+}
+
+void hardfull_process_2l(int guild) {
+  //client->tracker(confirmate file)
+
+}
+
+void hardfull_process_2s(int guild) {
+  //tracker->client(ip_sources)
+  
+}
 
 int port_mafia = 4000;
 int sheeps = 5000;
 int armed_agency = 6000;
+int guild = 7000;
 
 int main(void)
 {
