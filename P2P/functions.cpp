@@ -66,7 +66,7 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
   if (-1 == SocketFD)
   {
     cout << "error en la funcion enviar" << endl;
-    perror("cannot create socket");
+    //perror("cannot create socket");
     return 0;
     //exit(EXIT_FAILURE);
   }
@@ -79,16 +79,16 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
 
   if (0 > Res)
   {
-    cout << "error en la funcion enviar" << endl;
-    perror("error: first parameter is not a valid address family");
+    cout << "error en la funcion enviar 2" << endl;
+    //perror("error: first parameter is not a valid address family");
     close(SocketFD);
     return 0;
     //exit(EXIT_FAILURE);
   }
   else if (0 == Res)
   {
-    cout << "error en la funcion enviar" << endl;
-    perror("char string (second parameter does not contain valid ipaddress");
+    cout << "error en la funcion enviar 3" << endl;
+    //perror("char string (second parameter does not contain valid ipaddress");
     close(SocketFD);
     return 0;
     //exit(EXIT_FAILURE);
@@ -96,8 +96,8 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
 
   if (-1 == connect(SocketFD, (const struct sockaddr *)&stSockAddr, sizeof(struct sockaddr_in)))
   {
-    cout << "error en la funcion enviar" << endl;
-    perror("connect failed");
+    cout << "error en la funcion enviar 4" << endl;
+    //perror("connect failed");
     close(SocketFD);
     return 0;
     //exit(EXIT_FAILURE);
@@ -119,7 +119,7 @@ string my_custom_listen (int port_mafia) {
 
   if(-1 == SocketFD)
   {
-    perror("can not create socket");
+    //perror("can not create socket");
     //exit(EXIT_FAILURE);
     return "X";
   }
