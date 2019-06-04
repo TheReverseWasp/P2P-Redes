@@ -37,8 +37,7 @@ void driver_client() {
       login();
       cout << "ingrese el puerto nuevamente" << endl;
       cin >> port_mafia;
-      thread th1(listen_peer, port_mafia);
-      my_threads.push_back(move(th1));
+      my_threads.push_back(thread(listen_peer, port_mafia));
       break;
       case 3:
       logout();

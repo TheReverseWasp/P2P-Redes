@@ -12,6 +12,11 @@ int slptime = 1000000;
 
 bool continue_flag = 1;
 
+mutex mtx;
+
+vector<string> unresolved_file_names;
+map<string, vector<pair<string, int> > >available_peers;
+
 ///llr basics client
 void register_myself() {
   ///default input
@@ -148,24 +153,26 @@ string generate_message(string doc_name, int i) {
 
 void send_and_reciv(string doc_name, int i) {
   bool confirmed = my_custom_send(available_peers[doc_name][i].first,
-  available_peers[doc_name][i].second, generate_message(doc_name));
+  available_peers[doc_name][i].second, generate_message(doc_name, i));
   if (confirmed == 0) {
-    cout << "peer " + available_peers[doc_name].first + "-" << available_peers[doc_name].second << " is unactive" << endl;
+    cout << "peer " + available_peers[doc_name][i].first + "-" << available_peers[doc_name][i].second << " is unactive" << endl;
     return;
   }
-  string message = my_custom_listen(available_peers[doc_name].second);
-  info my_info();
+  string message = my_custom_listen(available_peers[doc_name][i].second);
+  info my_info;
   if (my_info.read_data(message) == 0) {
-    cout << "response is corrupted from peer " + available_peers[doc_name].first + "-" << available_peers[doc_name].second << endl;
+    cout << "response is corrupted from peer " + available_peers[doc_name][i].first + "-" << available_peers[doc_name][i].second << endl;
     return;
   }
   mtx.lock();
   if (write_file == 0) {
-    ostream my_file(doc_name.c_str());
+    filebuf fb;
+    fb.open (doc_name,std::ios::out);
+    ostream my_file(&fb);
     for (unsigned int i = 2; i < my_info.data.size(); i++) {
       my_file << my_info.data[i] << '\n'; //future correction
     }
-    my_file.close();
+    fb.close();
     write_file = 1;
   }
   mtx.unlock();
@@ -175,14 +182,13 @@ bool ask_peer(string doc_name) {
   bool is_ok = 0;
   vector<thread> my_v_thread;
   for (unsigned int i = 0; i < available_peers[doc_name].size(); i++) {
-    thread th1(send_and_reciv, doc_name, i);
-    my_v_thread.push_back(move(th1));
+    my_v_thread.push_back(thread(send_and_reciv, doc_name, i));
   }
-  for (unsigned int i = 0; i < my_v_.size(); i++) {
+  for (unsigned int i = 0; i < my_v_thread.size(); i++) {
     my_v_thread[i].join();
   }
   if (write_file == 1) {
-    wrote_file = 0;
+    write_file = 0;
     is_ok = 1;
   }
   return is_ok;
@@ -190,26 +196,34 @@ bool ask_peer(string doc_name) {
 
 string gen_response (string text) {
   string answer = "F";
-  string variable_part = my_ip + "#" + my_l_port + "#" + text + "#@";
+  string variable_part = my_ip + "#" + to_string(my_l_port) + "#" + text + "#@";
   answer += to_string(variable_part.size()) + variable_part;
+  return answer;
 }
 void listen_peer(int port_mafia) {
   while (continue_flag == 1) {
-    message = my_custom_listen(port_mafia);
+    string message = my_custom_listen(port_mafia);
     if (message[0] != 'X') {
-      info my_info();
+      info my_info;
       if (my_info.read_data(message) == 1) {
-        istream my_file(my_info[3].c_str());
-        string temp, acum;;
-        while (getline(my_file, temp) && acum.size() < 980) {
-          acum += temp;
+        filebuf fb;
+        if (fb.open(my_info.data[3], ios::in)) {
+          istream my_file(&fb);
+          string temp, acum;
+          while (getline(my_file, temp) && acum.size() < 980) {
+            acum += temp;
+          }
+          fb.close();
+          if (acum.size() > 980) {
+            acum = acum.substr(0, 980);
+          }
+          string my_response = gen_response(acum);
+          my_custom_send(my_info.data[0], stoi(my_info.data[1]), my_response);
+
         }
-        my_file.close();
-        if (acum.size() > 980) {
-          acum = acum.substr(0, 980);
+        else {
+          cout << "error al abrir el documento" << endl;
         }
-        string my_response = gen_response(acum);
-        my_custom_send(my_info.data[0], my_info.data[1], my_response);
       }
     }
   }
@@ -259,7 +273,7 @@ void ask_tracker () {
     return;
   }
   cout << "success" << endl;
-  info my_info();
+  info my_info;
   my_info.read_data(message_I_hear);
   for (unsigned int i = 2; i < my_info.data.size(); i+=2) {
     pair<string, int> temp;
