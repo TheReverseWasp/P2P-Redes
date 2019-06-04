@@ -100,9 +100,9 @@ void listen_peers_ask_info (string tracker_ip) {
       if (my_info.read_data(message) == 1) {
         for (unsigned int i = 0; i < loged_in_database_ph.size(); i++) {
           if (my_custom_send(loged_in_database_ph[i].first,
-            loged_in_database_ph[i].second,
+            ask_tracker_port,
             generate_message_from_tracker(tracker_ip, my_info.data[3])) == 1) {
-              string response = my_custom_listen(loged_in_database_ph[i].second);
+              string response = my_custom_listen(ask_tracker_port);
               if (response[0] != 'X' && response[0] != 'N') {
                 response_peers.push_back(loged_in_database_ph[i]);
               }

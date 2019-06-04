@@ -16,8 +16,6 @@ void register_file() {
   return;
 }
 
-bool loged_in = 0;
-
 void driver_client() {
   int opcion;
   int port_mafia;
@@ -39,6 +37,7 @@ void driver_client() {
       cout << "ingrese el puerto nuevamente" << endl;
       cin >> port_mafia;
       my_threads.push_back(thread(listen_peer, port_mafia));
+      cout << "loged in : " << my_threads.size() << endl;
       break;
       case 3:
       logout();
