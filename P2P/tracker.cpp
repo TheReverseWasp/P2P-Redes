@@ -1,17 +1,6 @@
 /* Client code in C */
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include "functions.h"
-#include <mutex>
-#include <thread>
-#include "intermediarios.h"
+#include "intermediarios_tracker.h"
 using namespace std;
 
 string tracker_ip;
@@ -24,6 +13,8 @@ void define_local_variables() {
 int main(void)
 {
   define_local_variables();
-  
-
+  thread th1(llr_basics_tracker, tracker_ip);
+  thread th2(listen_peers_ask_info, tracker_ip);
+  th1.join();
+  th2.join();
 }

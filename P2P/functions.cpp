@@ -4,12 +4,13 @@ using namespace std;
 
 int tracker_port = 5555;
 int ask_tracker_port = 5556;
+//int reserved_listen_tracker = 5557;
 
 int constant_size = 1005;
 int always = 4;
 
 info::info() {
-  msg_type = 'X';
+  msg_type = 'N';
 }
 bool info::read_data(string message) {
   if (message.find("@") == string::npos) {
@@ -18,8 +19,8 @@ bool info::read_data(string message) {
   msg_type = message[0];
   size_of_message = stoi(message.substr(1, 3));
   //the first element doesnt have # as predecesor
-  message = message.subst(4, message.size() - 4);
-  while (message[0] != "@") {
+  message = message.substr(4, message.size() - 4);
+  while (message[0] != '@') {
     int pos = message.find("#");
     if (pos == string::npos) {
       cout << "no encontro el #" << endl;
@@ -32,14 +33,15 @@ bool info::read_data(string message) {
   return 1;
 }
 
-info operator= (info ended) {
-  msg_type = ended.msg_type;
-  size_of_message = ended.size_of_message;
-  data.clear();
-  for (int i = 0; i < ended.data.size(); i++) {
-    data.push_back(ended.data[i]);
+int find_pair_str_int(vector<pair<string, int> > database, pair<string, int> x) {
+  int answer = -1;
+  for (unsigned int i = 0; i < database.size(); i++) {
+    if (database[i] == x) {
+      answer = i;
+      break;
+    }
   }
-  return this;
+  return answer;
 }
 
 string fill_0z(int my_size) {
@@ -63,7 +65,7 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
 
   if (-1 == SocketFD)
   {
-    cout << "error en la funcion enviar" << endl
+    cout << "error en la funcion enviar" << endl;
     perror("cannot create socket");
     return 0;
     //exit(EXIT_FAILURE);
@@ -77,7 +79,7 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
 
   if (0 > Res)
   {
-    cout << "error en la funcion enviar" << endl
+    cout << "error en la funcion enviar" << endl;
     perror("error: first parameter is not a valid address family");
     close(SocketFD);
     return 0;
@@ -85,7 +87,7 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
   }
   else if (0 == Res)
   {
-    cout << "error en la funcion enviar" << endl
+    cout << "error en la funcion enviar" << endl;
     perror("char string (second parameter does not contain valid ipaddress");
     close(SocketFD);
     return 0;
@@ -94,7 +96,7 @@ bool my_custom_send(string S_ip, int port_mafia, string message) {
 
   if (-1 == connect(SocketFD, (const struct sockaddr *)&stSockAddr, sizeof(struct sockaddr_in)))
   {
-    cout << "error en la funcion enviar" << endl
+    cout << "error en la funcion enviar" << endl;
     perror("connect failed");
     close(SocketFD);
     return 0;
@@ -119,7 +121,7 @@ string my_custom_listen (int port_mafia) {
   {
     perror("can not create socket");
     //exit(EXIT_FAILURE);
-    return "N";
+    return "X";
   }
 
   memset(&stSockAddr, 0, sizeof(struct sockaddr_in));
@@ -133,14 +135,14 @@ string my_custom_listen (int port_mafia) {
     perror("error bind failed");
     close(SocketFD);
     //exit(EXIT_FAILURE);
-    return "N";
+    return "X";
   }
 
   if(-1 == listen(SocketFD, 10))
   {
     perror("error listen failed");
     close(SocketFD);
-    return "N";
+    return "X";
     //exit(EXIT_FAILURE);
   }
 
@@ -152,7 +154,7 @@ string my_custom_listen (int port_mafia) {
     perror("error accept failed");
     close(SocketFD);
     //exit(EXIT_FAILURE);
-    return "N";
+    return "X";
   }
 
 
@@ -160,21 +162,21 @@ string my_custom_listen (int port_mafia) {
   n = read(ConnectFD, buffer, always);
   if (n < 0) {
     perror("ERROR reading from socket");
-    return "N";
+    return "X";
   }
-  string answer;
+  string message;
   for (size_t i = 0; i < always; i++) {
-    answer = to_string(buffer[i]);
+    message = to_string(buffer[i]);
   }
-  int left_sz = stoi(answer.substr(1, 3));
+  int left_sz = stoi(message.substr(1, 3));
   int pos = 0;
   while (left_sz > 0 && message[message.size() - 1] != '@') {
     n = read(ConnectFD, buffer, 1);
     if (n < 0) {
       perror("ERROR reading from socket");
-      return "N";
+      return "X";
     }
-    answer += to_string(buffer[pos + 4]);
+    message += to_string(buffer[pos + 4]);
     ++pos;
     --left_sz;
   }
@@ -186,6 +188,6 @@ string my_custom_listen (int port_mafia) {
   close(ConnectFD);
 
   close(SocketFD);
-  cout << "aqui esta el mensaje : " + answer << endl;
-  return answer;
+  cout << "aqui esta el mensaje : " + message << endl;
+  return message;
 }
