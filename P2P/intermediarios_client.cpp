@@ -29,7 +29,7 @@ void register_myself() {
   ///building message1
   string message = "2";
   string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
-  message += to_string(variable_part.size()) + variable_part;
+  message += fill_0z(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {
     usleep(slptime);
@@ -71,7 +71,7 @@ void login() {
   ///building message1
   string message = "0";
   string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
-  message += to_string(variable_part.size()) + variable_part;
+  message += fill_0z(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {
     usleep(slptime);
@@ -111,7 +111,7 @@ void logout() {
   ///building message1
   string message = "1";
   string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
-  message += to_string(variable_part.size()) + variable_part;
+  message += fill_0z(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {
     usleep(slptime);
@@ -197,7 +197,7 @@ bool ask_peer(string doc_name) {
 string gen_response (string text) {
   string answer = "F";
   string variable_part = my_ip + "#" + to_string(my_l_port) + "#" + text + "#@";
-  answer += to_string(variable_part.size()) + variable_part;
+  answer += fill_0z(variable_part.size()) + variable_part;
   return answer;
 }
 void listen_peer(int port_mafia) {
@@ -242,7 +242,7 @@ void ask_tracker () {
   string message = "3";
   string variable_part = my_ip + "#" + to_string(my_l_port) + "#" +
   doc_name +"#@";
-  message += to_string(variable_part.size()) + variable_part;
+  message += fill_0z(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   string message_I_hear;
   while (try_1 < attemps) {

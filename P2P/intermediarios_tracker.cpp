@@ -12,6 +12,7 @@ vector<pair<string, int> > loged_in_database_ph;
 void llr_basics_tracker(string my_tracker_ip) {
   while (true) {
     string temp = my_custom_listen(tracker_port);
+    cout << "the message is: " << temp << endl;
     info my_listener;
     int proceed_flag = 0;
     if (my_listener.read_data(temp) == 1) {
@@ -58,6 +59,9 @@ void llr_basics_tracker(string my_tracker_ip) {
       message += fill_0z(variable_part.size()) + variable_part;
       my_custom_send(my_register_data.first, tracker_port, message);
     }
+    else {
+      cout << "error leyendo el mensaje : " << temp << endl;
+    }
   }
   return;
 }
@@ -66,7 +70,7 @@ void llr_basics_tracker(string my_tracker_ip) {
 string generate_message_from_tracker(string tracker_ip, string doc_file) {
   string answer = "M";
   string variable_part = tracker_ip + "#" + to_string(ask_tracker_port) + "#" + doc_file + "#@";
-  answer += to_string(variable_part.size()) + variable_part;
+  answer += fill_0z(variable_part.size()) + variable_part;
   return answer;
 }
 
@@ -80,7 +84,7 @@ string response_from_tracker_generator(string tracker_ip, vector<pair<string, in
     variable_part += my_available_peers[i].first + "#" + to_string(my_available_peers[i].second) + "#";
   }
   variable_part += "@";
-  answer += to_string(variable_part.size()) + variable_part;
+  answer += fill_0z(variable_part.size()) + variable_part;
   return answer;
 }
 

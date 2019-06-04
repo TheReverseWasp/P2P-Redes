@@ -28,6 +28,7 @@ void driver_client() {
     cout << "2. logearse" << endl;
     cout << "3. desloguearse" << endl;
     cout << "4. registrar un file" << endl;
+    cout << "5. buscar un file en la red" << endl;
     cin >> opcion;
     switch (opcion) {
       case 1:
@@ -45,10 +46,13 @@ void driver_client() {
       case 4:
       register_file();
       break;
+      case 5:
+      ask_tracker();
+      break;
       default:
       break;
     }
-  } while (opcion < 5 && opcion > 0);
+  } while (opcion < 6 && opcion > 0);
   continue_flag = 0;
   for (unsigned int i = 0; i < my_threads.size(); i++) {
     my_threads[i].join();

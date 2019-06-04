@@ -132,7 +132,7 @@ string my_custom_listen (int port_mafia) {
 
   if(-1 == bind(SocketFD,(const struct sockaddr *)&stSockAddr, sizeof(struct sockaddr_in)))
   {
-    perror("error bind failed");
+    //perror("error bind failed");
     close(SocketFD);
     //exit(EXIT_FAILURE);
     return "X";
@@ -140,7 +140,7 @@ string my_custom_listen (int port_mafia) {
 
   if(-1 == listen(SocketFD, 10))
   {
-    perror("error listen failed");
+    //perror("error listen failed");
     close(SocketFD);
     return "X";
     //exit(EXIT_FAILURE);
@@ -151,7 +151,7 @@ string my_custom_listen (int port_mafia) {
 
   if(0 > ConnectFD)
   {
-    perror("error accept failed");
+    //perror("error accept failed");
     close(SocketFD);
     //exit(EXIT_FAILURE);
     return "X";
@@ -161,23 +161,23 @@ string my_custom_listen (int port_mafia) {
   bzero(buffer, constant_size);
   n = read(ConnectFD, buffer, always);
   if (n < 0) {
-    perror("ERROR reading from socket");
+    //perror("ERROR reading from socket");
     return "X";
   }
   string message;
   for (size_t i = 0; i < always; i++) {
-    message = to_string(buffer[i]);
+    message += buffer[i];
   }
   int left_sz = stoi(message.substr(1, 3));
-  int pos = 0;
-  while (left_sz > 0 && message[message.size() - 1] != '@') {
+  cout << "my_left_size " <<left_sz << endl;
+  while (left_sz > 0 && buffer[0] != '@') {
+    bzero(buffer, constant_size);
     n = read(ConnectFD, buffer, 1);
     if (n < 0) {
-      perror("ERROR reading from socket");
+      //perror("ERROR reading from socket");
       return "X";
     }
-    message += to_string(buffer[pos + 4]);
-    ++pos;
+    message += buffer[0];
     --left_sz;
   }
 
