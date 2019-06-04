@@ -1,7 +1,8 @@
-#include "intermediarios.h"
+#include "intermediarios_client.h"
 
 int my_l_port;
-int tracker_port = 5555;
+int tracker_port = 5555; ///default port for llr basics
+int ask_tracker_port = 5556; // default port else information on tracker
 string my_ip;
 string tracker_ip;
 //
@@ -11,6 +12,8 @@ int attemps = 3;
 int slptime = 1000;
 
 
+
+///llr basics client
 void register_myself() {
   ///default input
   cout << "indique su IP dice el nomo" << endl;
@@ -21,7 +24,7 @@ void register_myself() {
   cin >> tracker_ip;
   ///building message1
   string message = "2";
-  string variable_part = my_ip + "#" + to_string(my_l_port) + "@";
+  string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
   message += to_string(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {
@@ -63,7 +66,7 @@ void login() {
   cin >> tracker_ip;
   ///building message1
   string message = "0";
-  string variable_part = my_ip + "#" + to_string(my_l_port) + "@";
+  string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
   message += to_string(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {
@@ -103,7 +106,7 @@ void logout() {
   cin >> my_l_port;
   ///building message1
   string message = "1";
-  string variable_part = my_ip + "#" + to_string(my_l_port) + "@";
+  string variable_part = my_ip + "#" + to_string(my_l_port) + "#@";
   message += to_string(variable_part.size()) + variable_part;
   int try_1 = 0, try_2 = 0;
   while (try_1 < attemps) {

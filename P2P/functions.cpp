@@ -2,6 +2,9 @@
 
 using namespace std;
 
+int tracker_port = 5555;
+int ask_tracker_port = 5556;
+
 int constant_size = 1005;
 int always = 4;
 

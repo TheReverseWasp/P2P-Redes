@@ -1,12 +1,11 @@
-#ifndef INTERMEDIAROS_H
-#define INTERMEDIAROS_H
+#ifndef INTERMEDIAROS_CLIENT_H
+#define INTERMEDIAROS_CLIENT_H
 
 #include "functions.h"
 
 using namespace std;
 
 extern int my_l_port;
-extern int tracker_port;
 extern string my_ip;
 extern string tracker_ip;
 //
@@ -16,9 +15,10 @@ extern int attemps;
 extern int slptime;
 
 
-void login();
-void logout();
-void register_myself();
+///llr basics client
+extern void login();
+extern void logout();
+extern void register_myself();
 
 
 #endif

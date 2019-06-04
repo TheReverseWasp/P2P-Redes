@@ -7,6 +7,11 @@ using namespace std;
 
 extern int constant_size = 1005;
 extern int always = 4;
+///
+extern int tracker_port;
+extern int ask_tracker_port;
+///
+
 
 struct info{
   char msg_type;
